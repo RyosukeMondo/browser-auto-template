@@ -1,10 +1,13 @@
 """Data models for browser research."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import Enum
+from functools import partial
 from typing import Any
 
 from pydantic import BaseModel, Field
+
+_utcnow = partial(datetime.now, tz=UTC)
 
 
 class RequestMethod(str, Enum):
@@ -42,7 +45,7 @@ class CapturedRequest(BaseModel):
     """Single captured HTTP request/response."""
 
     id: str = Field(description="Unique request ID")
-    timestamp: datetime = Field(default_factory=datetime.now)
+    timestamp: datetime = Field(default_factory=_utcnow)
     method: RequestMethod
     url: str
     headers: dict[str, str] = Field(default_factory=dict)
@@ -75,7 +78,7 @@ class SiteAnalysis(BaseModel):
 
     url: str
     domain: str
-    timestamp: datetime = Field(default_factory=datetime.now)
+    timestamp: datetime = Field(default_factory=_utcnow)
     title: str | None = None
 
     # Technical details
@@ -105,7 +108,7 @@ class ResearchSession(BaseModel):
     """A complete research session."""
 
     id: str
-    created_at: datetime = Field(default_factory=datetime.now)
+    created_at: datetime = Field(default_factory=_utcnow)
     target_url: str
     objective: str
     analyses: list[SiteAnalysis] = Field(default_factory=list)

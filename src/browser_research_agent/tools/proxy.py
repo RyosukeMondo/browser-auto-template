@@ -3,7 +3,7 @@
 import asyncio
 import json
 import logging
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
@@ -65,7 +65,7 @@ class RequestCaptureAddon:
 
             captured = CapturedRequest(
                 id=str(uuid4()),
-                timestamp=datetime.now(),
+                timestamp=datetime.now(tz=UTC),
                 method=RequestMethod(request.method),
                 url=request.pretty_url,
                 headers=dict(request.headers),
