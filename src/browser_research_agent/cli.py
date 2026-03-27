@@ -15,6 +15,8 @@ from .config import settings
 from .storage import JSONStorage, MarkdownExporter, SQLiteStorage
 from .tools import BrowserController, CDPController, ProxyCapture
 
+_VERSION_CALLBACK_HANDLED = "version_handled"
+
 app = typer.Typer(
     name="bra",
     help="Browser Research Agent - AI-driven browser automation investigation",
@@ -319,9 +321,6 @@ def analyze(
         return
 
     analyzer = SiteAnalyzer()
-    # Get domain from first request
-    from urllib.parse import urlparse
-    domain = urlparse(requests[0].url).netloc
 
     analysis = analyzer.analyze(
         url=requests[0].url,
@@ -334,25 +333,31 @@ def analyze(
     console.print(f"API requests: {len([r for r in requests if r.is_api])}")
 
     if analysis.discovered_endpoints:
-        console.print(f"\n[bold]Discovered Endpoints ({len(analysis.discovered_endpoints)}):[/bold]")
+        ep_count = len(analysis.discovered_endpoints)
+        console.print(f"\n[bold]Discovered Endpoints ({ep_count}):[/bold]")
         for ep in analysis.discovered_endpoints[:20]:
             methods = ", ".join(m.value for m in ep.methods)
             auth = "[auth]" if ep.auth_required else ""
             console.print(f"  {methods:10} {ep.url_pattern} {auth}")
 
     if analysis.recommended_approach:
-        console.print(f"\n[bold]Recommendations:[/bold]")
+        console.print("\n[bold]Recommendations:[/bold]")
         console.print(analysis.recommended_approach)
 
 
-@app.callback()
+@app.callback(invoke_without_command=True)
 def main(
+    ctx: typer.Context,
     version: bool = typer.Option(False, "--version", "-V", help="Show version"),
 ) -> None:
     """Browser Research Agent - AI-driven browser automation investigation."""
     if version:
         from . import __version__
+
         console.print(f"browser-research-agent v{__version__}")
+        raise typer.Exit()
+    if ctx.invoked_subcommand is None:
+        console.print(ctx.get_help())
         raise typer.Exit()
 
 
