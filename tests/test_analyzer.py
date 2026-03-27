@@ -1,12 +1,11 @@
 """Tests for site analyzer."""
 
-import pytest
 
 from browser_research_agent.models import (
+    AntiBot,
+    AuthMethod,
     CapturedRequest,
     RequestMethod,
-    AuthMethod,
-    AntiBot,
 )
 from browser_research_agent.tools.analyzer import SiteAnalyzer
 

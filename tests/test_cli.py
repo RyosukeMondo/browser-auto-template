@@ -1,11 +1,10 @@
 """Tests for CLI commands."""
 
-import pytest
-from typer.testing import CliRunner
 from pathlib import Path
 
-from browser_research_agent.cli import app
+from typer.testing import CliRunner
 
+from browser_research_agent.cli import app
 
 runner = CliRunner()
 

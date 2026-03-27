@@ -1,10 +1,11 @@
 """Tests for storage backends."""
 
-import pytest
 from pathlib import Path
 
+import pytest
+
 from browser_research_agent.models import ResearchSession, SiteAnalysis
-from browser_research_agent.storage import SQLiteStorage, JSONStorage, MarkdownExporter
+from browser_research_agent.storage import JSONStorage, MarkdownExporter, SQLiteStorage
 
 
 class TestSQLiteStorage:

@@ -1,8 +1,8 @@
 """Browser research tools for AI agent."""
 
-from .proxy import ProxyCapture
+from .analyzer import SiteAnalyzer
 from .browser import BrowserController
 from .cdp import CDPController
-from .analyzer import SiteAnalyzer
+from .proxy import ProxyCapture
 
 __all__ = ["ProxyCapture", "BrowserController", "CDPController", "SiteAnalyzer"]

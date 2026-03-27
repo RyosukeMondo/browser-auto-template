@@ -2,7 +2,6 @@
 
 import logging
 import re
-from collections import defaultdict
 from typing import Any
 from urllib.parse import urlparse
 
@@ -11,7 +10,6 @@ from ..models import (
     AuthMethod,
     CapturedRequest,
     DiscoveredEndpoint,
-    RequestMethod,
     SiteAnalysis,
 )
 

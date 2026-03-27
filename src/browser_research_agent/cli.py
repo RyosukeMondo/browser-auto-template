@@ -171,7 +171,7 @@ def chrome(
 
         console.print(f"[green]Chrome started with CDP on port {port}[/green]")
         console.print(f"\nWebSocket URL: {ws_url}")
-        console.print(f"\nManual launch command:")
+        console.print("\nManual launch command:")
         console.print(f"  {cdp.get_launch_command()}")
 
         if url:
@@ -266,7 +266,7 @@ def export(
 
         session = await store.load_session(session_full_id)
         if not session:
-            console.print(f"[red]Failed to load session[/red]")
+            console.print("[red]Failed to load session[/red]")
             raise typer.Exit(1)
 
         if format == "markdown":
@@ -288,8 +288,9 @@ def analyze(
 ) -> None:
     """Analyze a HAR file for API endpoints."""
     import json
-    from .tools.analyzer import SiteAnalyzer
+
     from .models import CapturedRequest, RequestMethod
+    from .tools.analyzer import SiteAnalyzer
 
     setup_logging()
 

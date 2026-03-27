@@ -3,8 +3,8 @@
 These tests require actual browser/proxy - skip in CI without proper setup.
 """
 
+
 import pytest
-from pathlib import Path
 
 from browser_research_agent.agent.tools import AgentToolkit, execute_tool
 

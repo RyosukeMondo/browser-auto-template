@@ -1,16 +1,15 @@
 """Tests for data models."""
 
-import pytest
 from datetime import datetime
 
 from browser_research_agent.models import (
+    AntiBot,
+    AuthMethod,
     CapturedRequest,
     DiscoveredEndpoint,
-    SiteAnalysis,
-    ResearchSession,
     RequestMethod,
-    AuthMethod,
-    AntiBot,
+    ResearchSession,
+    SiteAnalysis,
 )
 
 

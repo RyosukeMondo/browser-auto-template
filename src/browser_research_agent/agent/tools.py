@@ -1,14 +1,11 @@
 """Tool definitions for Claude Agent SDK."""
 
-import asyncio
-import json
 import logging
-from pathlib import Path
 from typing import Any
 from uuid import uuid4
 
 from ..config import settings
-from ..models import ResearchSession, SiteAnalysis
+from ..models import ResearchSession
 from ..tools.analyzer import SiteAnalyzer
 from ..tools.browser import BrowserController
 from ..tools.cdp import CDPController
@@ -588,21 +585,21 @@ async def execute_tool(
 def _generate_markdown_report(session: ResearchSession) -> str:
     """Generate markdown report from research session."""
     lines = [
-        f"# Browser Research Report",
-        f"",
+        "# Browser Research Report",
+        "",
         f"**Target:** {session.target_url}",
         f"**Objective:** {session.objective}",
         f"**Date:** {session.created_at.isoformat()}",
         f"**Session ID:** {session.id}",
-        f"",
+        "",
     ]
 
     for i, analysis in enumerate(session.analyses, 1):
         lines.extend([
             f"## Analysis {i}: {analysis.domain}",
-            f"",
-            f"### Technologies Detected",
-            f"",
+            "",
+            "### Technologies Detected",
+            "",
         ])
 
         if analysis.technologies:
@@ -612,9 +609,9 @@ def _generate_markdown_report(session: ResearchSession) -> str:
             lines.append("- None detected")
 
         lines.extend([
-            f"",
-            f"### Anti-Bot Protection",
-            f"",
+            "",
+            "### Anti-Bot Protection",
+            "",
         ])
 
         if analysis.anti_bot:
@@ -624,9 +621,9 @@ def _generate_markdown_report(session: ResearchSession) -> str:
             lines.append("- None detected")
 
         lines.extend([
-            f"",
-            f"### Authentication",
-            f"",
+            "",
+            "### Authentication",
+            "",
             f"- Required: {'Yes' if analysis.requires_auth else 'No'}",
         ])
 
@@ -637,9 +634,9 @@ def _generate_markdown_report(session: ResearchSession) -> str:
             lines.append(f"- Login URL: {analysis.login_url}")
 
         lines.extend([
-            f"",
-            f"### API Endpoints Discovered",
-            f"",
+            "",
+            "### API Endpoints Discovered",
+            "",
         ])
 
         if analysis.discovered_endpoints:
@@ -650,27 +647,27 @@ def _generate_markdown_report(session: ResearchSession) -> str:
             lines.append("- No API endpoints discovered")
 
         lines.extend([
-            f"",
-            f"### Recommendation",
-            f"",
+            "",
+            "### Recommendation",
+            "",
             f"{analysis.recommended_approach or 'No specific recommendation'}",
-            f"",
+            "",
             f"**Recommended Tools:** {', '.join(analysis.recommended_tools)}",
-            f"",
+            "",
         ])
 
     if session.conclusion:
         lines.extend([
-            f"## Conclusion",
-            f"",
+            "## Conclusion",
+            "",
             f"{session.conclusion}",
-            f"",
+            "",
         ])
 
     if session.final_recommendation:
         lines.extend([
-            f"## Final Recommendation",
-            f"",
+            "## Final Recommendation",
+            "",
             f"**Tools:** {session.final_recommendation}",
         ])
 

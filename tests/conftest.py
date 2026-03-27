@@ -1,20 +1,12 @@
 """Pytest configuration and fixtures."""
 
-import asyncio
-import pytest
 from pathlib import Path
-from typing import AsyncGenerator, Generator
+from typing import AsyncGenerator
 
-from browser_research_agent.tools import ProxyCapture, BrowserController, SiteAnalyzer
+import pytest
+
 from browser_research_agent.agent.tools import AgentToolkit
-
-
-@pytest.fixture(scope="session")
-def event_loop() -> Generator[asyncio.AbstractEventLoop, None, None]:
-    """Create event loop for async tests."""
-    loop = asyncio.new_event_loop()
-    yield loop
-    loop.close()
+from browser_research_agent.tools import BrowserController, ProxyCapture, SiteAnalyzer
 
 
 @pytest.fixture

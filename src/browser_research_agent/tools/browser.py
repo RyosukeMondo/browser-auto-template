@@ -1,6 +1,5 @@
 """Playwright-based browser automation."""
 
-import asyncio
 import logging
 from pathlib import Path
 from typing import Any

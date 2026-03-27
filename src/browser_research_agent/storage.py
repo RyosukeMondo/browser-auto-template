@@ -1,8 +1,6 @@
 """Storage backends for research data (SQLite, JSON, Markdown)."""
 
-import json
 import logging
-from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -278,15 +276,15 @@ class MarkdownExporter:
     def _generate_markdown(self, session: ResearchSession) -> str:
         """Generate Markdown content."""
         lines = [
-            f"# Browser Automation Research Report",
-            f"",
-            f"| Field | Value |",
-            f"|-------|-------|",
+            "# Browser Automation Research Report",
+            "",
+            "| Field | Value |",
+            "|-------|-------|",
             f"| **Target URL** | {session.target_url} |",
             f"| **Objective** | {session.objective} |",
             f"| **Date** | {session.created_at.strftime('%Y-%m-%d %H:%M')} |",
             f"| **Session ID** | `{session.id}` |",
-            f"",
+            "",
         ]
 
         for i, analysis in enumerate(session.analyses, 1):
@@ -294,20 +292,20 @@ class MarkdownExporter:
 
         if session.conclusion:
             lines.extend([
-                f"## Conclusion",
-                f"",
+                "## Conclusion",
+                "",
                 f"{session.conclusion}",
-                f"",
+                "",
             ])
 
         if session.final_recommendation:
             lines.extend([
-                f"## Recommended Tools",
-                f"",
-                f"```",
+                "## Recommended Tools",
+                "",
+                "```",
                 f"{session.final_recommendation}",
-                f"```",
-                f"",
+                "```",
+                "",
             ])
 
         # Add quick start code
@@ -319,16 +317,16 @@ class MarkdownExporter:
         """Format a single analysis."""
         lines = [
             f"## Site Analysis: {analysis.domain}",
-            f"",
+            "",
         ]
 
         # Technologies table
         if analysis.technologies or analysis.anti_bot:
             lines.extend([
-                f"### Technologies & Protection",
-                f"",
-                f"| Category | Detected |",
-                f"|----------|----------|",
+                "### Technologies & Protection",
+                "",
+                "| Category | Detected |",
+                "|----------|----------|",
             ])
             if analysis.technologies:
                 lines.append(f"| Frameworks | {', '.join(analysis.technologies)} |")
@@ -339,8 +337,8 @@ class MarkdownExporter:
 
         # Authentication
         lines.extend([
-            f"### Authentication",
-            f"",
+            "### Authentication",
+            "",
             f"- **Required:** {'Yes' if analysis.requires_auth else 'No'}",
         ])
         if analysis.auth_methods:
@@ -353,10 +351,10 @@ class MarkdownExporter:
         # API Endpoints
         if analysis.discovered_endpoints:
             lines.extend([
-                f"### Discovered API Endpoints",
-                f"",
-                f"| Endpoint | Methods | Auth |",
-                f"|----------|---------|------|",
+                "### Discovered API Endpoints",
+                "",
+                "| Endpoint | Methods | Auth |",
+                "|----------|---------|------|",
             ])
             for ep in analysis.discovered_endpoints[:15]:
                 methods = ", ".join(m.value for m in ep.methods)
@@ -367,12 +365,12 @@ class MarkdownExporter:
         # Recommendations
         if analysis.recommended_approach:
             lines.extend([
-                f"### Recommendations",
-                f"",
+                "### Recommendations",
+                "",
                 f"{analysis.recommended_approach}",
-                f"",
+                "",
                 f"**Suggested Tools:** {', '.join(analysis.recommended_tools)}",
-                f"",
+                "",
             ])
 
         return lines
@@ -386,60 +384,60 @@ class MarkdownExporter:
         tools = analysis.recommended_tools
 
         lines = [
-            f"## Quick Start Code",
-            f"",
+            "## Quick Start Code",
+            "",
         ]
 
         # Playwright example
         if "playwright" in tools:
             lines.extend([
-                f"### Playwright",
-                f"",
-                f"```python",
-                f"from playwright.async_api import async_playwright",
-                f"",
-                f"async def main():",
-                f"    async with async_playwright() as p:",
-                f"        browser = await p.chromium.launch(headless=False)",
-                f"        page = await browser.new_page()",
+                "### Playwright",
+                "",
+                "```python",
+                "from playwright.async_api import async_playwright",
+                "",
+                "async def main():",
+                "    async with async_playwright() as p:",
+                "        browser = await p.chromium.launch(headless=False)",
+                "        page = await browser.new_page()",
                 f"        await page.goto('{session.target_url}')",
-                f"        # Your automation code here",
-                f"        await browser.close()",
-                f"```",
-                f"",
+                "        # Your automation code here",
+                "        await browser.close()",
+                "```",
+                "",
             ])
 
         # httpx example for API
         if "httpx" in tools and analysis.discovered_endpoints:
             ep = analysis.discovered_endpoints[0]
             lines.extend([
-                f"### Direct HTTP (httpx)",
-                f"",
-                f"```python",
-                f"import httpx",
-                f"",
-                f"async def fetch_data():",
-                f"    async with httpx.AsyncClient() as client:",
+                "### Direct HTTP (httpx)",
+                "",
+                "```python",
+                "import httpx",
+                "",
+                "async def fetch_data():",
+                "    async with httpx.AsyncClient() as client:",
                 f"        response = await client.get('{ep.url_pattern}')",
-                f"        return response.json()",
-                f"```",
-                f"",
+                "        return response.json()",
+                "```",
+                "",
             ])
 
         # Anti-detect example
         if "camoufox" in tools:
             lines.extend([
-                f"### Anti-Detect (Camoufox)",
-                f"",
-                f"```python",
-                f"from camoufox.sync_api import Camoufox",
-                f"",
-                f"with Camoufox(headless=False) as browser:",
-                f"    page = browser.new_page()",
+                "### Anti-Detect (Camoufox)",
+                "",
+                "```python",
+                "from camoufox.sync_api import Camoufox",
+                "",
+                "with Camoufox(headless=False) as browser:",
+                "    page = browser.new_page()",
                 f"    page.goto('{session.target_url}')",
-                f"    # Fingerprint is automatically randomized",
-                f"```",
-                f"",
+                "    # Fingerprint is automatically randomized",
+                "```",
+                "",
             ])
 
         return lines

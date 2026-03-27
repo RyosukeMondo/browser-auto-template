@@ -19,11 +19,10 @@ Usage from Claude Code:
 """
 
 import asyncio
-import json
 import logging
 from typing import Any
 
-from .tools import AgentToolkit, execute_tool, create_tools
+from .tools import AgentToolkit, create_tools, execute_tool
 
 logger = logging.getLogger(__name__)
 
