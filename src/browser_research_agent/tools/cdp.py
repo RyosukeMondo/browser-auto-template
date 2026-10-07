@@ -196,16 +196,19 @@ class CDPSession:
             raise RuntimeError("WebSocket not connected")
 
         self._id += 1
-        message = {"id": self._id, "method": method}
+        msg_id = self._id
+        message = {"id": msg_id, "method": method}
         if params:
             message["params"] = params
 
         future: asyncio.Future[dict[str, Any]] = asyncio.Future()
-        self._responses[self._id] = future
+        self._responses[msg_id] = future
 
         await self._ws.send(json.dumps(message))
-        result = await asyncio.wait_for(future, timeout=30)
-        del self._responses[self._id]
+        try:
+            result = await asyncio.wait_for(future, timeout=30)
+        finally:
+            self._responses.pop(msg_id, None)
 
         return result.get("result", {})
 
